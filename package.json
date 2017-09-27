@@ -1,0 +1,31 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "Language Interpretation and Recognition Interface using Twitter, Spottify, and OMDB APIs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zeeroh0/liri.git"
+  },
+  "keywords": [
+    "Twitter",
+    "Spottify",
+    "OMDB",
+    "node",
+    "node.js"
+  ],
+  "author": "Tyler Mitchell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zeeroh0/liri/issues"
+  },
+  "homepage": "https://github.com/Zeeroh0/liri#readme",
+  "dependencies": {
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.83.0",
+    "twitter": "^1.7.1"
+  }
+}
