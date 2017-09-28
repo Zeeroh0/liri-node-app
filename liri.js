@@ -35,12 +35,16 @@
 
 	function doTheThing() {
 		if (userCommand === 'my-tweets') {
+			logMe(userCommand, userSearch);
 			grabTweets();
 		} else if (userCommand === 'spotify-this-song') {
+			logMe(userCommand, userSearch);
 			grabSpotify(userSearch);
 		} else if (userCommand === 'movie-this') {
+			logMe(userCommand, userSearch);
 			grabOMDB(userSearch);
 		} else if (userCommand === 'do-what-it-says') {
+			logMe(userCommand, userSearch);
 			randomAction();
 		} 
 		else {
@@ -61,8 +65,16 @@
 
 		    for (var i = 0; i < tweets.length; i++) {
 		    	console.log('--------------------\n\n'+(i+1)+'\n'+tweets[i].created_at);
-		    	console.log(tweets[i].text+'\n\n');
+		    	console.log(tweets[i].text+'\n');
+
+	   			fs.appendFile("log.txt", '\n============\n'+tweets[i].created_at+
+					'\n'+tweets[i].text+'\n============', function(err) {
+					if (err) {
+						return console.log(err);
+					}		  
+				});
 		    }
+
 		  }
 		});
 	}
@@ -86,7 +98,17 @@
 				console.log('Check the song out here: '+songData[i].preview_url);
 				console.log('Album: '+songData[i].album.name);
 				console.log('--------------------\n');
+
+
+				fs.appendFile("log.txt", '\nArtist: '+songData[i].artists[0].name+
+					'\nSong Title: '+songData[i].name+'\n============', function(err) {
+					if (err) {
+						return console.log(err);
+					}		  
+				});
 			}
+
+
 
 		});
 	}
@@ -102,25 +124,33 @@
 
 			} else if (!error && response.statusCode === 200) {	
 
-				console.log('-------------------------------------------'+
-	    			"\n\nTitle of the movie: " + JSON.parse(body).Title +
-	    			"\n\nYear the movie came out: " + JSON.parse(body).Year +
-	    			"\n\nIMDB Rating of the movie: " + JSON.parse(body).imdbRating);
-				if ( JSON.parse(body).Ratings[1]) {
+				var print = console.log('-------------------------------------------'+
+		    			"\n\nTitle of the movie: " + JSON.parse(body).Title +
+		    			"\n\nYear the movie came out: " + JSON.parse(body).Year +
+		    			"\n\nIMDB Rating of the movie: " + JSON.parse(body).imdbRating);
+					if ( JSON.parse(body).Ratings[1]) {
+						console.log(
+						"\nRotten Tomatoes Rating of the movie: " + JSON.parse(body).Ratings[1].Value);
+					} else {
+						console.log(
+						"\nRotten Tomatoes Rating of the movie: N/A");
+					}
 					console.log(
-					"\nRotten Tomatoes Rating of the movie: " + JSON.parse(body).Ratings[1].Value);
-				} else {
-					console.log(
-					"\nRotten Tomatoes Rating of the movie: N/A");
-				}
-				console.log(
-	    			"\nCountry where the movie was produced: " + JSON.parse(body).Country +
-	    			"\n\nLanguage of the movie: " + JSON.parse(body).Language +
-	    			"\n\nPlot of the movie: " + JSON.parse(body).Plot +
-	    			"\n\nActors in the movie: " + JSON.parse(body).Actors +
-	    			'\n\n-------------------------------------------');
+		    			"\nCountry where the movie was produced: " + JSON.parse(body).Country +
+		    			"\n\nLanguage of the movie: " + JSON.parse(body).Language +
+		    			"\n\nPlot of the movie: " + JSON.parse(body).Plot +
+		    			"\n\nActors in the movie: " + JSON.parse(body).Actors +
+		    			'\n\n-------------------------------------------');
 
 			}
+
+			fs.appendFile("log.txt", '\n============\n'+JSON.parse(body).Title+
+				'\n'+JSON.parse(body).Plot+'\n============', function(err) {
+				if (err) {
+					return console.log(err);
+				}		  
+			});
+
 		});
 	}
 
@@ -140,6 +170,15 @@
 		  doTheThing();
 		});
 	}
+
+	function logMe(userCommand, userSearch) {
+		fs.appendFile("log.txt", '\n\n'+userCommand+'  ||  '+userSearch+'\n', function(err) {
+		  if (err) {
+		    return console.log(err);
+		  }		  
+		});
+	}
+
 
 
 
